@@ -123,11 +123,27 @@ for epoch in range(epochs):
             test_loss_values.append(test_loss.detach().numpy())
             print(f"Epoch: {epoch} | MAE Train Loss: {loss} | MAE Test Loss: {test_loss} ")
 
+
+# print("original weight and bias values: ")
+# print(f"weights: {weight}, bias: {bias}")
+
+# print("learned values for weight and bias: ")
+# print(model_0.state_dict())
+
 # Plot the loss curves
-plt.plot(epoch_count, train_loss_values, label="Train loss")
-plt.plot(epoch_count, test_loss_values, label="Test loss")
-plt.title("Training and test loss curves")
-plt.ylabel("Loss")
-plt.xlabel("Epochs")
-plt.legend()
-plt.show()
+# plt.plot(epoch_count, train_loss_values, label="Train loss")
+# plt.plot(epoch_count, test_loss_values, label="Test loss")
+# plt.title("Training and test loss curves")
+# plt.ylabel("Loss")
+# plt.xlabel("Epochs")
+# plt.legend()
+# plt.show()
+
+# making predictions
+model_0.eval()
+
+with torch.inference_mode():
+    y_preds = model_0(X_test)
+print(y_preds)
+
+plot_predictions(predictions=y_preds)
