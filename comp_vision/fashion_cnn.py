@@ -43,10 +43,6 @@ train_features_batch, train_labels_batch = next(iter(train_dataloader))
 
 
 class FashionMNISTModelV2(nn.Module):
-    """
-    Model architecture copying TinyVGG from: 
-    https://poloclub.github.io/cnn-explainer/
-    """
     def __init__(self, input_shape: int, hidden_units: int, output_shape: int):
         super().__init__()
         self.block_1 = nn.Sequential(
@@ -164,27 +160,16 @@ if Path("helper_functions.py").is_file():
   print("helper_functions.py already exists, skipping download")
 else:
   print("Downloading helper_functions.py")
-  # Note: you need the "raw" GitHub URL for this to work
   request = requests.get("https://raw.githubusercontent.com/mrdbourke/pytorch-deep-learning/main/helper_functions.py")
   with open("helper_functions.py", "wb") as f:
     f.write(request.content)
 
 
 # Import accuracy metric
-from helper_functions import accuracy_fn # Note: could also use torchmetrics.Accuracy()
+from helper_functions import accuracy_fn 
 
 from timeit import default_timer as timer 
 def print_train_time(start: float, end: float, device: torch.device = None):
-    """Prints difference between start and end time.
-
-    Args:
-        start (float): Start time of computation (preferred in timeit format). 
-        end (float): End time of computation.
-        device ([type], optional): Device that compute is running on. Defaults to None.
-
-    Returns:
-        float: time between start and end in seconds (higher is longer).
-    """
     total_time = end - start
     print(f"Train time on {device}: {total_time:.3f} seconds")
     return total_time
@@ -223,18 +208,6 @@ def eval_model(model: torch.nn.Module,
                loss_fn: torch.nn.Module, 
                accuracy_fn, 
                device: torch.device = device):
-    """Evaluates a given model on a given dataset.
-
-    Args:
-        model (torch.nn.Module): A PyTorch model capable of making predictions on data_loader.
-        data_loader (torch.utils.data.DataLoader): The target dataset to predict on.
-        loss_fn (torch.nn.Module): The loss function of model.
-        accuracy_fn: An accuracy function to compare the models predictions to the truth labels.
-        device (str, optional): Target device to compute on. Defaults to device.
-
-    Returns:
-        (dict): Results of model making predictions on data_loader.
-    """
     loss, acc = 0, 0
     model.eval()
     with torch.inference_mode():
@@ -305,26 +278,20 @@ plt.figure(figsize=(9, 9))
 nrows = 3
 ncols = 3
 for i, sample in enumerate(test_samples):
-  # Create a subplot
   plt.subplot(nrows, ncols, i+1)
 
-  # Plot the target image
   plt.imshow(sample.squeeze(), cmap="gray")
 
-  # Find the prediction label (in text form, e.g. "Sandal")
   pred_label = class_names[pred_classes[i]]
 
-  # Get the truth label (in text form, e.g. "T-shirt")
   truth_label = class_names[test_labels[i]] 
 
-  # Create the title text of the plot
   title_text = f"Pred: {pred_label} | Truth: {truth_label}"
   
-  # Check for equality and change title colour accordingly
   if pred_label == truth_label:
-      plt.title(title_text, fontsize=10, c="g") # green text if correct
+      plt.title(title_text, fontsize=10, c="g")
   else:
-      plt.title(title_text, fontsize=10, c="r") # red text if wrong
+      plt.title(title_text, fontsize=10, c="r") 
   plt.axis(False);
   
 plt.show()
